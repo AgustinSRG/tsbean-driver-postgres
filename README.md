@@ -5,7 +5,7 @@
 [![devDependency Status](https://david-dm.org/AgustinSRG/tsbean-driver-postgres/dev-status.svg)](https://david-dm.org/AgustinSRG/tsbean-driver-postgres?type=dev)
 [![peerDependency Status](https://david-dm.org/AgustinSRG/tsbean-driver-postgres/peer-status.svg)](https://david-dm.org/AgustinSRG/tsbean-driver-postgres?type=peer)
 
-This a MySQL driver for [tsbean-orm](https://github.com/AgustinSRG/tsbean-orm).
+This a PostgreSQL driver for [tsbean-orm](https://github.com/AgustinSRG/tsbean-orm).
 
 Based on [pg](https://www.npmjs.com/package/pg) package.
 
