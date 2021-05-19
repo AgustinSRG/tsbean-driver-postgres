@@ -42,7 +42,7 @@ export class PostgreSQLDriver implements DataSourceDriver {
      */
     public static createDataSource(config: PostgreSQLSourceConfiguration): DataSource {
         const driver = new PostgreSQLDriver(config);
-        return new DataSource("tsbean.driver.mysql", driver);
+        return new DataSource("tsbean.driver.postgres", driver);
     }
 
     public pool: Pool;

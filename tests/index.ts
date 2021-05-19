@@ -35,7 +35,7 @@ interface PersonData {
     birthDate: Date;
 }
 
-describe("MySQL tsbean-orm driver testing", () => {
+describe("PostgreSQL tsbean-orm driver testing", () => {
 
     before(async () => {
         // Create the tables if needed

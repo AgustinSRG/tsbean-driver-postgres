@@ -55,7 +55,7 @@ export function replaceLikeWildcards(str): string {
 }
 
 /**
- * Translates value into simething MySQL DBMs can understand
+ * Translates value into something MySQL DBMs can understand
  * @param val The original value
  * @returns Parsed value
  */
