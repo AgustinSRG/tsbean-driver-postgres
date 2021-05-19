@@ -10,7 +10,17 @@ import { readFileSync } from 'fs';
 import { Person } from './models/person';
 import { Dummy } from './models/dummy';
 
-const dataSource: DataSource = PostgreSQLDriver.createDataSource(JSON.parse(readFileSync(path.resolve(__dirname, "test.config.json")).toString()));
+const options = JSON.parse(readFileSync(path.resolve(__dirname, "test.config.json")).toString());
+
+if (process.env.POSTGRES_HOST) {
+    options.host = process.env.POSTGRES_HOST;
+}
+
+if (process.env.POSTGRES_PORT) {
+    options.port = process.env.POSTGRES_PORT;
+}
+
+const dataSource: DataSource = PostgreSQLDriver.createDataSource(options);
 const driver: PostgreSQLDriver = <PostgreSQLDriver>dataSource.driver;
 
 DataSource.set(DataSource.DEFAULT, dataSource);

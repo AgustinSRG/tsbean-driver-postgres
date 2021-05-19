@@ -1,9 +1,9 @@
 # TSBean-ORM PostgreSQL Driver
 
-[![npm version](https://badge.fury.io/js/tsbean-driver-mysql.svg)](https://badge.fury.io/js/tsbean-driver-postgres)
-[![Dependency Status](https://david-dm.org/AgustinSRG/tsbean-driver-mysql.svg)](https://david-dm.org/AgustinSRG/tsbean-driver-postgres)
-[![devDependency Status](https://david-dm.org/AgustinSRG/tsbean-driver-mysql/dev-status.svg)](https://david-dm.org/AgustinSRG/tsbean-driver-postgres?type=dev)
-[![peerDependency Status](https://david-dm.org/AgustinSRG/tsbean-driver-mysql/peer-status.svg)](https://david-dm.org/AgustinSRG/tsbean-driver-postgres?type=peer)
+[![npm version](https://badge.fury.io/js/tsbean-driver-postgres.svg)](https://badge.fury.io/js/tsbean-driver-postgres)
+[![Dependency Status](https://david-dm.org/AgustinSRG/tsbean-driver-postgres.svg)](https://david-dm.org/AgustinSRG/tsbean-driver-postgres)
+[![devDependency Status](https://david-dm.org/AgustinSRG/tsbean-driver-postgres/dev-status.svg)](https://david-dm.org/AgustinSRG/tsbean-driver-postgres?type=dev)
+[![peerDependency Status](https://david-dm.org/AgustinSRG/tsbean-driver-postgres/peer-status.svg)](https://david-dm.org/AgustinSRG/tsbean-driver-postgres?type=peer)
 
 This a MySQL driver for [tsbean-orm](https://github.com/AgustinSRG/tsbean-orm).
 
@@ -24,8 +24,8 @@ import { PostgreSQLDriver } from "tsbean-driver-postgres"
 const mySource = PostgreSQLDriver.createDataSource({
     host: "localhost",
     port: 5432,
-    user: "root",
-    password: "",
+    user: "postgres",
+    password: "postgres",
     database: "my_database"
 });
 
@@ -107,8 +107,8 @@ If you want to disable this behaviour, and instead use identifiers as-it, you ca
 const mySource = PostgreSQLDriver.createDataSource({
     host: "localhost",
     port: 5432,
-    user: "root",
-    password: "",
+    user: "postgres",
+    password: "postgres",
     database: "my_database",
     disableIdentifierConversion: true
 });
