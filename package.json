@@ -1,6 +1,6 @@
 {
   "name": "tsbean-driver-postgres",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "PostgreSQL driver for TSBean-ORM.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

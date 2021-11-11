@@ -27,7 +27,7 @@ export interface PostgreSQLSourceConfiguration {
     connections?: number;
     database: string;
     disableIdentifierConversion?: boolean;
-    customIdentifierConversion: NameConversion;
+    customIdentifierConversion?: NameConversion;
 }
 
 /**
