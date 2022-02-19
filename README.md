@@ -1,9 +1,6 @@
 # TSBean-ORM PostgreSQL Driver
 
 [![npm version](https://badge.fury.io/js/tsbean-driver-postgres.svg)](https://badge.fury.io/js/tsbean-driver-postgres)
-[![Dependency Status](https://david-dm.org/AgustinSRG/tsbean-driver-postgres.svg)](https://david-dm.org/AgustinSRG/tsbean-driver-postgres)
-[![devDependency Status](https://david-dm.org/AgustinSRG/tsbean-driver-postgres/dev-status.svg)](https://david-dm.org/AgustinSRG/tsbean-driver-postgres?type=dev)
-[![peerDependency Status](https://david-dm.org/AgustinSRG/tsbean-driver-postgres/peer-status.svg)](https://david-dm.org/AgustinSRG/tsbean-driver-postgres?type=peer)
 
 This a PostgreSQL driver for [tsbean-orm](https://github.com/AgustinSRG/tsbean-orm).
 
@@ -34,7 +31,7 @@ DataSource.set(DataSource.DEFAULT, mySource);
 
 ## Correspondence of identifiers
 
-This driver from [camel case](https://en.wikipedia.org/wiki/Camel_case) to [snake case](https://en.wikipedia.org/wiki/Snake_case). By default, we expect all the database table and column identifiers in snake case. Those identifiers will be converted to camel case before passing to tsbean, so you can work with camel case identifiers in your code.
+This driver maps from [camel case](https://en.wikipedia.org/wiki/Camel_case) to [snake case](https://en.wikipedia.org/wiki/Snake_case). By default, we expect all the database table and column identifiers in snake case. Those identifiers will be converted to camel case before passing to tsbean, so you can work with camel case identifiers in your code.
 
 Here is an example:
 
