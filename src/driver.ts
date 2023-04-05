@@ -2,7 +2,7 @@
 
 "use strict";
 
-import { Client, Pool } from "pg";
+import { Pool } from "pg";
 import Cursor from "pg-cursor";
 import { DataSourceDriver, DataSource, GenericKeyValue, GenericRow, SortDirection, GenericFilter } from "tsbean-orm";
 import { filterToSQL } from "./filtering";
@@ -59,7 +59,6 @@ export class PostgreSQLDriver implements DataSourceDriver {
             user: config.user,
             password: config.password,
             database: config.database,
-            parseInputDatesAsUTC: true,
         });
         if (config.customIdentifierConversion) {
             this.idConversion = config.customIdentifierConversion;
@@ -463,8 +462,21 @@ export class PostgreSQLDriver implements DataSourceDriver {
                 sentence += ", ";
             }
 
-            sentence += "\"" + this.idConversion.toSQL(key) + "\" = ?";
-            values.push(toSQLCompatibleValue(updated[key]));
+            if (typeof updated[key] === "object" && updated[key] !== null) {
+                if (updated[key].update === "set") {
+                    sentence += "\"" + this.idConversion.toSQL(key) + "\" = ?";
+                    values.push(toSQLCompatibleValue(updated[key].value));
+                } else if (updated[key].update === "inc") {
+                    sentence += "\"" + this.idConversion.toSQL(key) + "\" = \"" + this.idConversion.toSQL(key) + "\" + ?";
+                    values.push(toSQLCompatibleValue(updated[key].value));
+                } else {
+                    sentence += "\"" + this.idConversion.toSQL(key) + "\" = ?";
+                    values.push(toSQLCompatibleValue(updated[key]));
+                }
+            } else {
+                sentence += "\"" + this.idConversion.toSQL(key) + "\" = ?";
+                values.push(toSQLCompatibleValue(updated[key]));
+            }
         }
 
         const cond1 = filterToSQL(filter, this.idConversion.toSQL);

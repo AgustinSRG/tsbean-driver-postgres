@@ -4,7 +4,7 @@
 
 import path from 'path';
 import { expect } from 'chai';
-import { DataFilter, DataSource, OrderBy, SelectOptions } from 'tsbean-orm';
+import { DataFilter, DataSource, DataUpdate, OrderBy, SelectOptions } from 'tsbean-orm';
 import { PostgreSQLDriver } from "../src/index";
 import { readFileSync } from 'fs';
 import { Person } from './models/person';
@@ -31,7 +31,7 @@ interface PersonData {
     surname: string;
     age: number;
     hasDriverLicense: boolean;
-    preferences: string[];
+    preferences: string[] | null;
     birthDate: Date;
 }
 
@@ -160,7 +160,7 @@ describe("PostgreSQL tsbean-orm driver testing", () => {
         expect(personFound).to.be.null;
     });
 
-    let dummyId = null;
+    let dummyId: number | null = null;
 
     it("Insert (Dummy) and FindByKey", async () => {
         const dummy = new Dummy({
@@ -213,7 +213,7 @@ describe("PostgreSQL tsbean-orm driver testing", () => {
     it("Update primary key (Dummy)", async () => {
         const dummy = await Dummy.finder.findByKey(dummyId);
 
-        dummy.id = dummyId + 1;
+        dummy.id = <number>dummyId + 1;
 
         await dummy.save();
 
@@ -265,7 +265,7 @@ describe("PostgreSQL tsbean-orm driver testing", () => {
     });
 
     it("Find (Stream)", async () => {
-        const results = [];
+        const results: Person[] = [];
         await Person.finder.findStream(DataFilter.any(), OrderBy.asc("id"), SelectOptions.default(), async (person: Person) => {
             results.push(person);
         });
@@ -274,7 +274,7 @@ describe("PostgreSQL tsbean-orm driver testing", () => {
     });
 
     it("Find (Stream Sync)", async () => {
-        const results = [];
+        const results: Person[] = [];
         await Person.finder.findStreamSync(DataFilter.any(), OrderBy.asc("id"), SelectOptions.default(), async (person: Person) => {
             results.push(person);
         });
@@ -417,11 +417,12 @@ describe("PostgreSQL tsbean-orm driver testing", () => {
         rows = rows.map(row => {
             if (row.age > 50) {
                 row.hasDriverLicense = false;
+                row.age++;
             }
             return row;
         });
 
-        await Person.finder.update({hasDriverLicense: false}, DataFilter.greaterThan("age", 50));
+        await Person.finder.update({ hasDriverLicense: DataUpdate.set(false), age: DataUpdate.increment(1) }, DataFilter.greaterThan("age", 50));
 
         const results = await Person.finder.find(DataFilter.any(), OrderBy.asc("id"));
 
