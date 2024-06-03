@@ -1,6 +1,6 @@
 {
   "name": "tsbean-driver-postgres",
-  "version": "2.0.2",
+  "version": "3.0.0",
   "description": "PostgreSQL driver for TSBean-ORM.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -32,7 +32,7 @@
     "lint"
   ],
   "peerDependencies": {
-    "tsbean-orm": "2.0.2"
+    "tsbean-orm": "3.0.0"
   },
   "devDependencies": {
     "@types/chai": "4.3.4",
@@ -53,6 +53,6 @@
   "dependencies": {
     "pg": "8.10.0",
     "pg-cursor": "2.9.0",
-    "tsbean-orm": "2.0.2"
+    "tsbean-orm": "3.0.0"
   }
 }

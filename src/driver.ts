@@ -4,7 +4,7 @@
 
 import { Pool } from "pg";
 import Cursor from "pg-cursor";
-import { DataSourceDriver, DataSource, GenericKeyValue, GenericRow, SortDirection, GenericFilter } from "tsbean-orm";
+import { DataSourceDriver, DataSource, GenericKeyValue, GenericRow, SortDirection, GenericFilter, QueryExtraOptions } from "tsbean-orm";
 import { filterToSQL } from "./filtering";
 import { normalizeSQLResults, toCamelCase, toPostgresTemplate, toSnakeCase, toSQLCompatibleValue } from "./utils";
 
@@ -117,7 +117,7 @@ export class PostgreSQLDriver implements DataSourceDriver {
         }.bind(this));
     }
 
-    private generateSelectSentence(table: string, filter: GenericFilter, sortBy: string, sortDir: SortDirection, skip: number, limit: number, projection: Set<string>): { sql: string, values: any[] } {
+    private generateSelectSentence(table: string, filter: GenericFilter, sortBy: string, sortDir: SortDirection, skip: number, limit: number, projection: Set<string>, queryExtraOptions: QueryExtraOptions): { sql: string, values: any[] } {
         let sentence = "SELECT ";
         const values = [];
 
@@ -168,10 +168,11 @@ export class PostgreSQLDriver implements DataSourceDriver {
      * @param sortDir "asc" or "desc". Leave as null for default sorting
      * @param skip Number of rows to skip. Leave as -1 for no skip
      * @param limit Limit of results. Leave as -1 for no limit
-     * @param projection List of fields to featch from the table. Leave as null to fetch them all.
+     * @param projection List of fields to fetch from the table. Leave as null to fetch them all.
+     * @param queryExtraOptions Additional query options
      */
-    find(table: string, filter: GenericFilter, sortBy: string, sortDir: SortDirection, skip: number, limit: number, projection: Set<string>): Promise<GenericRow[]> {
-        const sentenceAndValues = this.generateSelectSentence(table, filter, sortBy, sortDir, skip, limit, projection);
+    find(table: string, filter: GenericFilter, sortBy: string, sortDir: SortDirection, skip: number, limit: number, projection: Set<string>, queryExtraOptions: QueryExtraOptions): Promise<GenericRow[]> {
+        const sentenceAndValues = this.generateSelectSentence(table, filter, sortBy, sortDir, skip, limit, projection, queryExtraOptions);
         const sentence = sentenceAndValues.sql;
         const values = sentenceAndValues.values;
 
@@ -193,8 +194,9 @@ export class PostgreSQLDriver implements DataSourceDriver {
      * Counts the number of rows matching a condition
      * @param table Table or collection name
      * @param filter Filter to apply
+     * @param queryExtraOptions Additional query options
      */
-    count(table: string, filter: GenericFilter): Promise<number> {
+    count(table: string, filter: GenericFilter, queryExtraOptions: QueryExtraOptions): Promise<number> {
         let sentence = "SELECT COUNT(*) AS \"count\" FROM \"" + table + "\"";
         const values = [];
         const cond1 = filterToSQL(filter, this.idConversion.toSQL);
@@ -228,11 +230,12 @@ export class PostgreSQLDriver implements DataSourceDriver {
      * @param sortDir "asc" or "desc". Leave as null for default sorting
      * @param skip Number of rows to skip. Leave as -1 for no skip
      * @param limit Limit of results. Leave as -1 for no limit
-     * @param projection List of fields to featch from the table. Leave as null to fetch them all.
+     * @param projection List of fields to fetch from the table. Leave as null to fetch them all.
+     * @param queryExtraOptions Additional query options
      * @param each Function to parse each row
      */
-    findStream(table: string, filter: GenericFilter, sortBy: string, sortDir: SortDirection, skip: number, limit: number, projection: Set<string>, each: (row: GenericRow) => Promise<void>): Promise<void> {
-        const sentenceAndValues = this.generateSelectSentence(table, filter, sortBy, sortDir, skip, limit, projection);
+    findStream(table: string, filter: GenericFilter, sortBy: string, sortDir: SortDirection, skip: number, limit: number, projection: Set<string>, queryExtraOptions: QueryExtraOptions, each: (row: GenericRow) => Promise<void>): Promise<void> {
+        const sentenceAndValues = this.generateSelectSentence(table, filter, sortBy, sortDir, skip, limit, projection, queryExtraOptions);
         const sentence = sentenceAndValues.sql;
         const values = sentenceAndValues.values;
 
@@ -249,7 +252,7 @@ export class PostgreSQLDriver implements DataSourceDriver {
 
             let resultsEnded = false;
             while (!resultsEnded) {
-                const partialResuls: any[] = await (new Promise<any[]>(function (resolve) {
+                const partialResults: any[] = await (new Promise<any[]>(function (resolve) {
                     cursor.read(CURSOR_READ_AMOUNT, (err, rows) => {
                         if (err) {
                             return resolve([]);
@@ -258,8 +261,8 @@ export class PostgreSQLDriver implements DataSourceDriver {
                     });
                 }));
 
-                if (partialResuls.length > 0) {
-                    for (const row of partialResuls) {
+                if (partialResults.length > 0) {
+                    for (const row of partialResults) {
                         await each(this.idConversion.parseResults([row])[0]);
                     }
                 } else {
@@ -284,11 +287,12 @@ export class PostgreSQLDriver implements DataSourceDriver {
      * @param sortDir "asc" or "desc". Leave as null for default sorting
      * @param skip Number of rows to skip. Leave as -1 for no skip
      * @param limit Limit of results. Leave as -1 for no limit
-     * @param projection List of fields to featch from the table. Leave as null to fetch them all.
+     * @param projection List of fields to fetch from the table. Leave as null to fetch them all.
+     * @param queryExtraOptions Additional query options
      * @param each Function to parse each row
      */
-    findStreamSync(table: string, filter: GenericFilter, sortBy: string, sortDir: SortDirection, skip: number, limit: number, projection: Set<string>, each: (row: any) => void): Promise<void> {
-        const sentenceAndValues = this.generateSelectSentence(table, filter, sortBy, sortDir, skip, limit, projection);
+    findStreamSync(table: string, filter: GenericFilter, sortBy: string, sortDir: SortDirection, skip: number, limit: number, projection: Set<string>, queryExtraOptions: QueryExtraOptions, each: (row: any) => void): Promise<void> {
+        const sentenceAndValues = this.generateSelectSentence(table, filter, sortBy, sortDir, skip, limit, projection, queryExtraOptions);
         const sentence = sentenceAndValues.sql;
         const values = sentenceAndValues.values;
 
@@ -305,7 +309,7 @@ export class PostgreSQLDriver implements DataSourceDriver {
 
             let resultsEnded = false;
             while (!resultsEnded) {
-                const partialResuls: any[] = await (new Promise<any[]>(function (resolve) {
+                const partialResults: any[] = await (new Promise<any[]>(function (resolve) {
                     cursor.read(CURSOR_READ_AMOUNT, (err, rows) => {
                         if (err) {
                             return resolve([]);
@@ -314,8 +318,8 @@ export class PostgreSQLDriver implements DataSourceDriver {
                     });
                 }));
 
-                if (partialResuls.length > 0) {
-                    for (const row of partialResuls) {
+                if (partialResults.length > 0) {
+                    for (const row of partialResults) {
                         each(this.idConversion.parseResults([row])[0]);
                     }
                 } else {
@@ -364,7 +368,7 @@ export class PostgreSQLDriver implements DataSourceDriver {
         sentence += ")";
 
         if (key && (row[key] === null || row[key] === undefined)) {
-            // Auto-genrated key
+            // Auto-generated key
             sentence += " RETURNING \"" + this.idConversion.toSQL(key) + "\"";
             insertReturns = true;
         }
