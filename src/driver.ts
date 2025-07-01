@@ -209,7 +209,7 @@ export class PostgreSQLDriver implements DataSourceDriver {
         }
 
         return new Promise<number>(function (resolve, reject) {
-            this.pool.query(sentence, values, function (error, results) {
+            this.pool.query(toPostgresTemplate(sentence), values, function (error, results) {
                 if (error) {
                     return reject(error);
                 }

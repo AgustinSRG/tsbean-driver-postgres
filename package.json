@@ -1,6 +1,6 @@
 {
   "name": "tsbean-driver-postgres",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "PostgreSQL driver for TSBean-ORM.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -43,7 +43,7 @@
     "@typescript-eslint/parser": "5.57.1",
     "chai": "4.3.7",
     "eslint": "8.37.0",
-    "mocha": "10.2.0",
+    "mocha": "11.7.1",
     "rimraf": "4.4.1",
     "ts-node": "10.9.1",
     "typedoc": "0.23.28",

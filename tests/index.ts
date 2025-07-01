@@ -251,7 +251,7 @@ describe("PostgreSQL tsbean-orm driver testing", () => {
     it("Batch Insert and Find All", async () => {
         await dataSource.driver.batchInsert("person", rows);
 
-        expect(await Person.finder.count(DataFilter.any())).to.be.equal(10);
+        expect(await Person.finder.count(DataFilter.greaterOrEquals("age", 1))).to.be.equal(10);
 
         const results = await Person.finder.find(DataFilter.any(), OrderBy.asc("id"));
 
