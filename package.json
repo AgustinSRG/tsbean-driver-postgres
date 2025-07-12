@@ -7,7 +7,7 @@
   "homepage": "https://github.com/AgustinSRG/tsbean-driver-postgres",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AgustinSRG/tsbean-driver-postgres"
+    "url": "git+https://github.com/AgustinSRG/tsbean-driver-postgres.git"
   },
   "scripts": {
     "prebuild": "npm run lint",
