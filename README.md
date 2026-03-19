@@ -112,3 +112,9 @@ const mySource = PostgreSQLDriver.createDataSource({
 ```
 
 You can also set `customIdentifierConversion` to implement your own identifier conversion.
+
+## PostGIS support
+
+This driver does not offer support for [PostGIS](https://postgis.net/), an extension of Postgres for geospatial data.
+
+If you need support for that extension, try the following fork of this driver: https://github.com/Sn4pe/tsbean-driver-postgis
