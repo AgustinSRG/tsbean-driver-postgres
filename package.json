@@ -1,6 +1,6 @@
 {
   "name": "tsbean-driver-postgres",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "PostgreSQL driver for TSBean-ORM.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -39,10 +39,10 @@
     "@types/mocha": "10.0.1",
     "@types/node": "18.15.11",
     "@types/pg": "8.6.6",
-    "@typescript-eslint/eslint-plugin": "5.57.1",
-    "@typescript-eslint/parser": "5.57.1",
+    "@typescript-eslint/eslint-plugin": "8.72.0",
+    "@typescript-eslint/parser": "8.72.0",
     "chai": "4.3.7",
-    "eslint": "8.37.0",
+    "eslint": "8.57.1",
     "mocha": "11.7.1",
     "rimraf": "4.4.1",
     "ts-node": "10.9.1",
@@ -54,5 +54,11 @@
     "pg": "8.10.0",
     "pg-cursor": "2.9.0",
     "tsbean-orm": "3.0.0"
+  },
+  "overrides": {
+    "mocha": {
+      "diff": "8.0.4",
+      "serialize-javascript": "7.1.3"
+    }
   }
 }
