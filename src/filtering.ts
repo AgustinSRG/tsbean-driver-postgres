@@ -3,7 +3,7 @@
 "use strict";
 
 import { GenericFilter } from "tsbean-orm";
-import { replaceLikeWildcards, reverseRegexp } from "./utils";
+import { LIKE_ESCAPE_CHAR, regexpToLikePattern } from "./utils";
 
 /**
  * Parses filter and creates a SQL expression for It
@@ -77,24 +77,14 @@ export function filterToSQL(filter: GenericFilter, idConverter: (id: string) => 
         {
             const field = filter.key;
             const val = filter.regexp;
-            const rStr = reverseRegexp(val);
 
             if (val.flags.indexOf("i") >= 0) {
-                query += "UPPER(\"" + idConverter(field) + "\") LIKE UPPER(?)";
+                query += "UPPER(\"" + idConverter(field) + "\") LIKE UPPER(?) ESCAPE '" + LIKE_ESCAPE_CHAR + "'";
             } else {
-                query += "\"" + idConverter(field) + "\" LIKE ?";
+                query += "\"" + idConverter(field) + "\" LIKE ? ESCAPE '" + LIKE_ESCAPE_CHAR + "'";
             }
 
-            if (rStr.startsWith("^")) {
-                // Starts with
-                values.push(replaceLikeWildcards(rStr.substr(1)) + "%");
-            } else if (rStr.endsWith("$")) {
-                // Starts with
-                values.push("%" + replaceLikeWildcards(rStr.substr(0, rStr.length - 1)));
-            } else {
-                // Contains
-                values.push("%" + replaceLikeWildcards(rStr) + "%");
-            }
+            values.push(regexpToLikePattern(val));
         }
         break;
     case "in":
